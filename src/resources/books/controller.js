@@ -34,48 +34,48 @@ const createOne = async (req, res) => {
   }
 };
 
-const getAll = async (req, res)  => {
-console.log("Books Router [READ]", {body: req.body})
+// const getAll = async (req, res)  => {
+// console.log("Books Router [READ]", {body: req.body})
 
-const getAllSQL = `
-SELECT *
-FROM books
-`;
-try {
+// const getAllSQL = `
+// SELECT *
+// FROM books
+// `;
+// try {
 
-const result = await db.query(getAllSQL)
-res.json ({data: result.rows})
-} catch (error) {
-    console.error ("[ERROR getAll: ", {error: error.message});
+// const result = await db.query(getAllSQL)
+// res.json ({data: result.rows})
+// } catch (error) {
+//     console.error ("[ERROR getAll: ", {error: error.message});
 
-    res.status(500).json({ error: error.message });
-  }
-}
+//     res.status(500).json({ error: error.message });
+//   }
+// }
 
-const getOneById = async (req, res) => {
-console.log("Books Router [READ]: ", {body:req.body})
+// const getOneById = async (req, res) => {
+// console.log("Books Router [READ]: ", {body:req.body})
 
-const idToGet = req.params.id
-console.log("idToGet: ", req.params.id)
+// const idToGet = req.params.id
+// console.log("idToGet: ", req.params.id)
 
-const getOneByIdSQL = `
-SELECT *
-FROM products
-WHERE id = $1;
-`
-try {
+// const getOneByIdSQL = `
+// SELECT *
+// FROM products
+// WHERE id = $1;
+// `
+// try {
 
-  const result = await db.query(getOneByIdSQL, [idToGet])
-  res.json ({data: result.rows[0]})
-  } catch (error) {
-      console.error ("[ERROR getOneById: ", {error: error.message});
+//   const result = await db.query(getOneByIdSQL, [idToGet])
+//   res.json ({data: result.rows[0]})
+//   } catch (error) {
+//       console.error ("[ERROR getOneById: ", {error: error.message});
   
-      res.status(500).json({ error: error.message });
-    }
-}
+//       res.status(500).json({ error: error.message });
+//     }
+// }
 
  module.exports = {
-  createOne,
-  getAll,
-  getOneById
+  createOne
+  // getAll,
+  // getOneById
 };
