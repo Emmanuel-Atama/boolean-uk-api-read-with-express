@@ -27,7 +27,47 @@ const createOne = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const getAll = async (req, res)  => {
+  console.log("Pets Router [READ]", {body: req.body})
+  
+  const getAllSQL = `
+  SELECT *
+  FROM pets
+  `;
+  try {
+  const result = await db.query(getAllSQL)
+  res.json ({data: result.rows})
+  } catch (error) {
+      console.error ("[ERROR getAll: ", {error: error.message});
+  
+      res.status(500).json({ error: error.message });
+    }
+  }
+  
+  const getOneById = async (req, res) => {
+  console.log("Pets Router [READ]: ", {body:req.body})
+  
+  const idToGet = req.params.id
+  console.log("idToGet: ", req.params.id)
+  
+  const getOneByIdSQL = `
+  SELECT *
+  FROM pets
+  WHERE id = $1;
+  `
+  try {
+  
+    const result = await db.query(getOneByIdSQL, [idToGet])
+    res.json ({data: result.rows[0]})
+    } catch (error) {
+        console.error ("[ERROR getOneById: ", {error: error.message});
+    
+        res.status(500).json({ error: error.message });
+      }
+  }
 
 module.exports = {
-  createOne
+  createOne,
+  getAll,
+  getOneById
 };

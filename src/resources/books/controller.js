@@ -34,48 +34,94 @@ const createOne = async (req, res) => {
   }
 };
 
-// const getAll = async (req, res)  => {
-// console.log("Books Router [READ]", {body: req.body})
+const getAll = async (req, res)  => {
+console.log("Books Router [READ]", {body: req.body})
 
-// const getAllSQL = `
-// SELECT *
-// FROM books
-// `;
-// try {
+const getAllSQL = `
+SELECT *
+FROM books
+`;
+try {
+const result = await db.query(getAllSQL)
+res.json ({data: result.rows})
+} catch (error) {
+    console.error ("[ERROR getAll: ", {error: error.message});
 
-// const result = await db.query(getAllSQL)
-// res.json ({data: result.rows})
-// } catch (error) {
-//     console.error ("[ERROR getAll: ", {error: error.message});
+    res.status(500).json({ error: error.message });
+  }
+}
 
-//     res.status(500).json({ error: error.message });
-//   }
-// }
+const getOneById = async (req, res) => {
+console.log("Books Router [READ]: ", {body:req.body})
 
-// const getOneById = async (req, res) => {
-// console.log("Books Router [READ]: ", {body:req.body})
+const idToGet = req.params.id
+console.log("idToGet: ", req.params.id)
 
-// const idToGet = req.params.id
-// console.log("idToGet: ", req.params.id)
+const getOneByIdSQL = `
+SELECT *
+FROM books
+WHERE id = $1;
+`
+try {
 
-// const getOneByIdSQL = `
-// SELECT *
-// FROM products
-// WHERE id = $1;
-// `
-// try {
-
-//   const result = await db.query(getOneByIdSQL, [idToGet])
-//   res.json ({data: result.rows[0]})
-//   } catch (error) {
-//       console.error ("[ERROR getOneById: ", {error: error.message});
+  const result = await db.query(getOneByIdSQL, [idToGet])
+  res.json ({data: result.rows[0]})
+  } catch (error) {
+      console.error ("[ERROR getOneById: ", {error: error.message});
   
-//       res.status(500).json({ error: error.message });
-//     }
-// }
+      res.status(500).json({ error: error.message });
+    }
+}
 
+const getByFiction = async (req, res) => {
+console.log("Books Router [READ]: ", {body:req.body})
+
+const fictionToGet = req.params.type
+console.log("fictionToGet: ", req.params.type)
+
+const getByFictionSQL = `
+SELECt * FROM books where type='fiction'
+`
+try {
+  
+  const result = await db.query(getByFictionSQL, [fictionToGet])
+  res.json ({data: result.rows})
+  } catch (error) {
+      console.error ("[ERROR getOneByFiction: ", {error: error.message});
+  
+      res.status(500).json({ error: error
+        
+        .message });
+    }
+}
+
+const getByFictionTopic = async (req, res) => {
+
+  const { bookType } = req.params
+  const { topic } = req.query
+
+  let getByFictionTopicSQL = `
+  SELECT * FROM books WHERE type = $1
+  `
+  const ParamsSQL = [bookType]
+
+  if (topic) {
+    getByFictionTopicSQL += `AND topic = $2`
+    ParamsSQL.push(topic)
+  }
+  try {
+    const result = await db.query(getByFictionTopicSQL, [ParamsSQL])
+    res.json({data: result.rows})
+  } catch (error) {
+    console.error("[ERROR getByFictionTopic: ", {error:error.message})
+
+    res.status(500).json({error:error.message})
+  }
+}
  module.exports = {
-  createOne
-  // getAll,
-  // getOneById
+  createOne,
+  getAll,
+  getOneById,
+  getByFiction,
+  getByFictionTopic
 };
