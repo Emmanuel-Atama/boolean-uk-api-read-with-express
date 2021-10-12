@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { createOne, getAll, getOneById, getByFiction, getByFictionTopic} = require("./controller");
+const { createOne, getAll, getOneById, getByFiction, getByFictionTopic, getByNonFiction} = require("./controller");
 
 const router = express.Router();
 
@@ -13,5 +13,7 @@ router.get("/:id", getOneById)
 router.get("/:type", getByFiction)
 
 router.get("/:bookType", getByFictionTopic)
+
+router.get("/:type", getByNonFiction)
 
 module.exports = router;

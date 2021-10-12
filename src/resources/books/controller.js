@@ -87,7 +87,7 @@ try {
   const result = await db.query(getByFictionSQL, [fictionToGet])
   res.json ({data: result.rows})
   } catch (error) {
-      console.error ("[ERROR getOneByFiction: ", {error: error.message});
+      console.error ("[ERROR getByFiction: ", {error: error.message});
   
       res.status(500).json({ error: error
         
@@ -118,10 +118,32 @@ const getByFictionTopic = async (req, res) => {
     res.status(500).json({error:error.message})
   }
 }
+const getByNonFiction = async (req, res) => {
+  console.log("Books Router [READ]: ", {body:req.body})
+  
+  const fictionToGet = req.params.type
+  console.log("fictionToGet: ", req.params.type)
+  
+  const getByNonFictionSQL = `
+  SELECt * FROM books where type='non-fiction'
+  `
+  try {
+    
+    const result = await db.query(getByNonFictionSQL, [fictionToGet])
+    res.json ({data: result.rows})
+    } catch (error) {
+        console.error ("[ERROR getByNonFiction: ", {error: error.message});
+    
+        res.status(500).json({ error: error
+          
+          .message });
+      }
+  }
  module.exports = {
   createOne,
   getAll,
   getOneById,
   getByFiction,
-  getByFictionTopic
+  getByFictionTopic,
+  getByNonFiction
 };
